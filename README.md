@@ -4,14 +4,14 @@ A complete Docker Compose system that analyzes README files from the [compose-fo
 
 ## Features
 
-✅ **One-command startup**: `docker compose up`  
-✅ **Multiple chat interfaces**: FastAPI UI, React UI, and OpenWebUI  
-✅ **AI-powered analysis**: Uses Mistral 7B via Docker Model Runner  
-✅ **Comprehensive reports**: Individual and comparative analysis  
-✅ **Box integration**: Automatic upload via MCP Gateway  
-✅ **Real-time progress**: Live updates during analysis  
+- **One-command startup**: `docker compose up`  
+- **Multiple chat interfaces**: FastAPI UI, React UI, and OpenWebUI  
+- **AI-powered analysis**: Uses Mistral 7B via Docker Model Runner  
+- **Comprehensive reports**: Individual and comparative analysis  
+- **Box integration**: Automatic upload via MCP Gateway  
+- **Real-time progress**: Live updates during analysis  
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### Prerequisites
 - Docker Desktop with Model Runner enabled
