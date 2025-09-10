@@ -1,0 +1,90 @@
+
+services:
+  # MCP Gateway - handles MCP server connections
+  mcp-gateway:
+    image: docker/mcp-gateway:latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "~/.docker/mcp:/mcp"
+    command:
+      - --catalog=/mcp/catalogs/docker-mcp.yaml
+      - --config=/mcp/config.yaml
+      - --registry=/mcp/registry.yaml
+      - --tools-config=/mcp/tools.yaml
+      - --secrets=docker-desktop
+      - --watch=true
+      - --transport=sse
+      - --port=8080
+    use_api_socket: true
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # README Analysis Agent
+  readme-analyzer:
+    image: demo/readme-analyzer
+    build:
+      context: ./agent
+      dockerfile: Dockerfile
+    ports:
+      - "7777:7777"
+    environment:
+      - MCPGATEWAY_URL=http://mcp-gateway:8080
+      - MODEL_RUNNER_URL=http://model-runner.docker.internal/engines/llama.cpp/v1
+      - MODEL_RUNNER_MODEL=ai/mistral:7B-Q4_0
+    depends_on:
+      mcp-gateway:
+        condition: service_healthy
+    volumes:
+      - ./agent:/app
+      - ./workspace:/workspace
+    models:
+      mistral-small:
+        endpoint_var: MODEL_RUNNER_URL
+        model_var: MODEL_RUNNER_MODEL
+    restart: unless-stopped
+
+  # OpenWebUI - Primary Chat Interface
+  openwebui:
+    image: ghcr.io/open-webui/open-webui:main
+    ports:
+      - "3000:8080"
+    environment:
+      - OPENAI_API_BASE_URL=http://model-runner.docker.internal/engines/llama.cpp/v1
+      - OPENAI_API_KEY=dummy
+      - WEBUI_AUTH=false
+      - WEBUI_NAME=README Analyzer
+    volumes:
+      - open-webui:/app/backend/data
+    depends_on:
+      - readme-analyzer
+    restart: unless-stopped
+
+  # Optional: React UI
+  agent-ui:
+    image: demo/agent-ui
+    build:
+      context: ./ui
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3000"
+    environment:
+      - REACT_APP_AGENT_URL=http://localhost:7777
+    depends_on:
+      - readme-analyzer
+    restart: unless-stopped
+
+# Docker Model Runner configuration
+models:
+  mistral-small:
+    model: ai/mistral:7B-Q4_0  # ~4.1 GB
+    context_size: 8192  # Adjust based on your VRAM
+    # For larger context if you have more VRAM:
+    # context_size: 16384
+
+volumes:
+  open-webui:
