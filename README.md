@@ -1,8 +1,8 @@
-# 📊 README Analyzer Agent
+# Moby README Analyzer Agent
 
 A complete Docker Compose system that analyzes README files from the [compose-for-agents](https://github.com/docker/compose-for-agents) repository and uploads comprehensive analysis reports to Box using MCP (Model Context Protocol).
 
-## 🎯 Features
+## Features
 
 ✅ **One-command startup**: `docker compose up`  
 ✅ **Multiple chat interfaces**: FastAPI UI, React UI, and OpenWebUI  
@@ -15,12 +15,12 @@ A complete Docker Compose system that analyzes README files from the [compose-fo
 
 ### Prerequisites
 - Docker Desktop with Model Runner enabled
-- Box MCP server configured (included with Docker Desktop)
+- Box MCP server configured (included with Docker MCP Toolkit)
 - At least 8GB RAM (for Mistral 7B model)
 
 ### 1. Start the System
 ```bash
-docker compose up
+docker compose up --build
 ```
 
 ### 2. Access Interfaces
@@ -109,7 +109,7 @@ The generated report includes:
 ## 2. github-summarizer/README.md
 [Additional project analyses...]
 
-# 🔍 Comparative Analysis
+# Comparative Analysis
 
 ## Common Patterns
 - Most projects use FastAPI for web services
@@ -120,7 +120,7 @@ The generated report includes:
 [AI-generated insights about technology usage...]
 ```
 
-## ⚙️ Configuration
+## Configuration
 
 ### Model Settings
 ```yaml
@@ -136,7 +136,7 @@ models:
 - `MCPGATEWAY_URL`: MCP Gateway connection
 - `AGENT_PORT`: Main agent port (default: 7777)
 
-## 🛠️ Development
+## Development
 
 ### File Structure
 ```
@@ -154,55 +154,8 @@ readme-analyzer-agent/
 └── README.md               # This file
 ```
 
-### Customization
-- **Change Model**: Edit `models.mistral-small.model` in compose.yaml
-- **Adjust Memory**: Modify `context_size` for your hardware
-- **Add Analysis**: Update prompts in `agent/main.py`
-- **UI Styling**: Customize CSS in React components
 
-## 🔧 Troubleshooting
 
-| Issue | Solution |
-|-------|----------|
-| Model Runner not found | Enable Docker Model Runner in Docker Desktop |
-| Box upload fails | Verify Box MCP server is configured |
-| Out of memory | Reduce `context_size` in compose.yaml |
-| Port conflicts | Change port mappings in compose.yaml |
-| Analysis errors | Check logs with `docker compose logs readme-analyzer` |
 
-### Logs
-```bash
-# View all logs
-docker compose logs
 
-# Follow specific service
-docker compose logs -f readme-analyzer
 
-# Check health
-docker compose ps
-```
-
-## 📈 Performance
-
-- **Analysis Time**: ~2-5 minutes for 8 README files
-- **Model Loading**: ~30 seconds initial startup
-- **Memory Usage**: ~6-8GB for Mistral 7B
-- **Storage**: ~5GB for model + containers
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test with `docker compose up --build`
-5. Submit a pull request
-
-## 📄 License
-
-MIT License - Feel free to use and modify for your projects.
-
----
-
-**Ready to analyze some README files?** 🎯
-
-Run `docker compose up` and visit http://localhost:7777 to get started!
