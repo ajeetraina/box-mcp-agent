@@ -15,7 +15,7 @@ A complete Docker Compose system that analyzes README files from the [compose-fo
 
 ### Prerequisites
 - Docker Desktop with Model Runner enabled
-- Box MCP server configured (included with Docker MCP Toolkit)
+- Box MCP server configured with Client ID and tokens (included with Docker MCP Toolkit)
 - At least 8GB RAM (for Mistral 7B model)
 
 ### 1. Start the System
